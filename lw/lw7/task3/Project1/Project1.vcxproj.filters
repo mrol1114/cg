@@ -20,10 +20,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Window.h">
+    <ClInclude Include="IDrawable.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="IDrawable.h">
+    <ClInclude Include="Line.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
@@ -32,10 +32,10 @@
     <ClInclude Include="ShaderProgram.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Line.h">
+    <ClInclude Include="Window.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="CoordinateGrid.h">
+    <ClInclude Include="VertexArray.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,6 +8,7 @@
 #include <vector>
 #include <stdexcept>
 #include <optional>
+#include <chrono>
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -29,6 +30,8 @@ public:
         : m_window(window)
         , m_program(std::make_unique<ShaderProgram>())
     {
+        glGenVertexArrays(1, &m_VAO);
+        glGenBuffers(1, &m_VBO);
     }
 
     ~Window()
@@ -43,9 +46,10 @@ public:
 
     void Run()
     {
-        InitShaders();
+        Init();
 
         glClearColor(1, 1, 1, 0);
+        glPointSize(5);
 
         glUseProgram(*m_program);
 
@@ -58,18 +62,22 @@ public:
             glEnable(GL_DEPTH_TEST);
 
             OnMotion();
+            Idle();
+
             SetupProjectionMatrix(width, height);
             SetupCameraMatrix();
-
-            glm::dmat4x4 MVP;
             SetupShaderMatrix();
-            glUniformMatrix4fv(16, 1, GL_FALSE, m_shaderMatrix);
 
+            glBindVertexArray(m_VAO);
             DrawObjects();
+            glBindVertexArray(0);
 
             glfwSwapBuffers(m_window);
             glfwPollEvents();
         }
+
+        glDeleteBuffers(1, &m_VBO);
+        glDeleteVertexArrays(1, &m_VAO);
     }
 
     void AddDrawable(std::shared_ptr<IDrawable> drawable)
@@ -77,7 +85,47 @@ public:
         m_drawableObjects.push_back(drawable);
     }
 
+    unsigned int& GetVAO()
+    {
+        return m_VAO;
+    }
+
+    unsigned int& GetVBO()
+    {
+        return m_VBO;
+    }
+
+    float& GetPhase()
+    {
+        return m_phase;
+    }
+
 private:
+    void Init()
+    {
+        InitShaders();
+
+        for (auto& drawableObject : m_drawableObjects)
+        {
+            drawableObject->Init();
+        }
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    void Idle()
+    {
+        auto elapsed = m_previousTime - m_currentTime;
+
+        float delta = elapsed.count() * 0.001f;
+
+        m_phase = fmodf(
+            float(m_phase + delta * 2 * M_PI / m_ANIMATION_SPEED),
+            float(2 * M_PI)
+        );
+    }
+
     void SetupShaderMatrix()
     {
         auto matrix = m_projectionMatrix * m_cameraMatrix;
@@ -89,6 +137,8 @@ private:
                 m_shaderMatrix[i*4 + j] = matrix[i][j];
             }
         }
+
+        glUniformMatrix4fv(16, 1, GL_FALSE, m_shaderMatrix);
     }
 
     void InitShaders()
@@ -197,7 +247,11 @@ private:
         };
     }
 
-    const static int m_FRUSTUM_SIZE = 2;
+    inline const static int m_FRUSTUM_SIZE = 2;
+    inline static const float m_ANIMATION_SPEED = 0.001;
+
+    std::chrono::steady_clock::time_point m_currentTime = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point m_previousTime = std::chrono::steady_clock::now();
 
     std::optional<double> m_mousePosX;
     std::optional<double> m_mousePosY;
@@ -206,6 +260,8 @@ private:
     std::unique_ptr<ShaderProgram> m_program = nullptr;
     std::vector<std::shared_ptr<IDrawable>> m_drawableObjects = {};
     std::vector<std::shared_ptr<Shader>> m_shaders = {};
+    unsigned int m_VAO, m_VBO;
+    float m_phase;
 
     glm::dmat4x4 m_cameraMatrix = glm::lookAt(
         glm::dvec3{ 0.0, 0.0, 2 },
