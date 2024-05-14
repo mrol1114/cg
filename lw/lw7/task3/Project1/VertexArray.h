@@ -46,7 +46,7 @@ private:
 
 	void Draw()override
 	{
-		glUniform1f(0, m_phase);
+		glUniform1f(0, (sinf(m_phase) + 1) / 2);
 		glBindVertexArray(m_VAO);
 
 		glDrawArrays(GL_POINTS, 0, m_vertices.size());
@@ -59,8 +59,10 @@ private:
 		glBindVertexArray(m_VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices), m_vertices.data(), GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(float), m_vertices.data(), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);

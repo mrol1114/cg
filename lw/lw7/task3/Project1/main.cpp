@@ -17,17 +17,13 @@ layout (location=0) uniform float u_phase;
 
 void main()
 {
-    //vec4 vertex = mix(gl_Vertex, vec4(endPosition, 1.0), phase);
-    //gl_Position = gl_ModelViewProjectionMatrix * vertex;
-
-    float endPoistionZ = (x*x / 0.5 / 2) + (y*y / 0.5 / 2);
+    float endPoistionZ = (position.x*position.x / 0.5 / 2) + (position.y*position.y / 0.5 / 2);
     vec4 endPosition = vec4(position.xy, endPoistionZ, 1.0);
 
-    //float startPoistionZ = (x*x / 0.5 / 2) - (y*y / 0.5 / 2);
-    //vec4 startPosition = vec4(position.xy, startPoistionZ, 1.0);
+    float startPoistionZ = (position.x*position.x / 0.5 / 2) - (position.y*position.y / 0.5 / 2);
+    vec4 startPosition = vec4(position.xy, startPoistionZ, 1.0);
 
-    //vec4 currentDirection = u_phase >= 0 ? endPosition : startPosition;
-    vec4 vertex = mix(vec4(position, 1.0), endPosition, u_phase);
+    vec4 vertex = mix(startPosition, endPosition, u_phase);
 
     gl_Position = u_matrix * vertex;
 }
@@ -52,7 +48,7 @@ void main()
     }
 
     Window window(glfwWindow);
-    window.AddDrawable(std::make_shared<VertexArray>(30, window.GetVBO(), window.GetVAO(), window.GetPhase()));
+    window.AddDrawable(std::make_shared<VertexArray>(8, window.GetVBO(), window.GetVAO(), window.GetPhase()));
     window.AddShader(std::make_shared<Shader>(GL_VERTEX_SHADER, vertexShaderCircle.c_str()));
     window.Run();
 

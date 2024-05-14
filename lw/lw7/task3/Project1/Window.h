@@ -85,17 +85,17 @@ public:
         m_drawableObjects.push_back(drawable);
     }
 
-    unsigned int& GetVAO()
+    const unsigned int& GetVAO()const
     {
         return m_VAO;
     }
 
-    unsigned int& GetVBO()
+    const unsigned int& GetVBO()const
     {
         return m_VBO;
     }
 
-    float& GetPhase()
+    const float& GetPhase()const
     {
         return m_phase;
     }
@@ -264,7 +264,7 @@ private:
     float m_phase;
 
     glm::dmat4x4 m_cameraMatrix = glm::lookAt(
-        glm::dvec3{ 0.0, 0.0, 2 },
+        glm::dvec3{ 0.0, 0.0, 5 },
         glm::dvec3{ 0.0, 0.0, 0.0 },
         glm::dvec3{ 0.0, 1.0, 0.0 }
     );
