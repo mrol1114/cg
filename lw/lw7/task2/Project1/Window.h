@@ -63,6 +63,7 @@ public:
             SetupShaderMatrix();
 
             glUniformMatrix4fv(16, 1, GL_FALSE, m_shaderMatrix);
+            glUniform2f(0, width, height);
 
             DrawObjects();
 
@@ -85,7 +86,7 @@ private:
         {
             for (int j = 0; j < 4; j++)
             {
-                m_shaderMatrix[i*4 + j] = matrix[i][j];
+                m_shaderMatrix[i * 4 + j] = matrix[i][j];
             }
         }
     }
@@ -216,5 +217,5 @@ private:
         glm::dvec3{ 0.0, 0.0, 0.0 },
         glm::dvec3{ 0.0, 0.0, 0.0 }
     );
-    float m_shaderMatrix[16] = {0.0};
+    float m_shaderMatrix[16] = { 0.0 };
 };
