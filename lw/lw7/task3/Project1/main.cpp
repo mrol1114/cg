@@ -4,7 +4,7 @@
 
 #include "Window.h"
 #include "Line.h"
-#include "VertexArray.h"
+#include "MorphObject.h"
 
 int main(void)
 {
@@ -32,7 +32,7 @@ void main()
     if (!glfwInit())
         throw std::runtime_error("glfw is not initialized");
 
-    GLFWwindow* glfwWindow = glfwCreateWindow(720, 540, "Paraboloid", NULL, NULL);
+    GLFWwindow* glfwWindow = glfwCreateWindow(720, 540, "Parabaloid", NULL, NULL);
     if (!glfwWindow)
     {
         glfwTerminate();
@@ -48,7 +48,7 @@ void main()
     }
 
     Window window(glfwWindow);
-    window.AddDrawable(std::make_shared<VertexArray>(8, window.GetVBO(), window.GetVAO(), window.GetPhase()));
+    window.AddDrawable(std::make_shared<MorphObject>(8, window.GetVBO(), window.GetVAO()));
     window.AddShader(std::make_shared<Shader>(GL_VERTEX_SHADER, vertexShaderCircle.c_str()));
     window.Run();
 

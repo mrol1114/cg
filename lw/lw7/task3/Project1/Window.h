@@ -8,7 +8,6 @@
 #include <vector>
 #include <stdexcept>
 #include <optional>
-#include <chrono>
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -62,7 +61,6 @@ public:
             glEnable(GL_DEPTH_TEST);
 
             OnMotion();
-            Idle();
 
             SetupProjectionMatrix(width, height);
             SetupCameraMatrix();
@@ -95,11 +93,6 @@ public:
         return m_VBO;
     }
 
-    const float& GetPhase()const
-    {
-        return m_phase;
-    }
-
 private:
     void Init()
     {
@@ -112,18 +105,6 @@ private:
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-    }
-
-    void Idle()
-    {
-        auto elapsed = m_previousTime - m_currentTime;
-
-        float delta = elapsed.count() * 0.001f;
-
-        m_phase = fmodf(
-            float(m_phase + delta * 2 * M_PI / m_ANIMATION_SPEED),
-            float(2 * M_PI)
-        );
     }
 
     void SetupShaderMatrix()
@@ -248,10 +229,6 @@ private:
     }
 
     inline const static int m_FRUSTUM_SIZE = 2;
-    inline static const float m_ANIMATION_SPEED = 0.001;
-
-    std::chrono::steady_clock::time_point m_currentTime = std::chrono::steady_clock::now();
-    std::chrono::steady_clock::time_point m_previousTime = std::chrono::steady_clock::now();
 
     std::optional<double> m_mousePosX;
     std::optional<double> m_mousePosY;
@@ -261,7 +238,6 @@ private:
     std::vector<std::shared_ptr<IDrawable>> m_drawableObjects = {};
     std::vector<std::shared_ptr<Shader>> m_shaders = {};
     unsigned int m_VAO, m_VBO;
-    float m_phase;
 
     glm::dmat4x4 m_cameraMatrix = glm::lookAt(
         glm::dvec3{ 0.0, 0.0, 5 },

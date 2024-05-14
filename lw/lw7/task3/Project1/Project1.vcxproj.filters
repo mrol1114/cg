@@ -35,7 +35,7 @@
     <ClInclude Include="Window.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="VertexArray.h">
+    <ClInclude Include="MorphObject.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

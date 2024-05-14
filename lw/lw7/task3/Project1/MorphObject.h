@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 
 #include <vector>
+#include <chrono>
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -11,13 +12,12 @@
 
 #include "./IDrawable.h"
 
-class VertexArray : public IDrawable
+class MorphObject : public IDrawable
 {
 public:
-	VertexArray(int density, const unsigned int& VBO, const unsigned int& VAO, const float& phase)
+	MorphObject(int density, const unsigned int& VBO, const unsigned int& VAO)
 		: m_VBO(VBO)
 		, m_VAO(VAO)
-		, m_phase(phase)
 	{
 		float size = 2.0 / density;
 
@@ -46,6 +46,8 @@ private:
 
 	void Draw()override
 	{
+		UpdatePhase();
+
 		glUniform1f(0, (sinf(m_phase) + 1) / 2);
 		glBindVertexArray(m_VAO);
 
@@ -68,7 +70,24 @@ private:
 		glBindVertexArray(0);
 	}
 
+	void UpdatePhase()
+	{
+		auto elapsed = m_previousTime - m_currentTime;
+
+		float delta = elapsed.count() * 0.001f;
+
+		m_phase = fmodf(
+			float(m_phase + delta * 2 * M_PI / m_ANIMATION_SPEED),
+			float(2 * M_PI)
+		);
+	}
+
+	inline static const float m_ANIMATION_SPEED = 0.001;
+
+	std::chrono::steady_clock::time_point m_currentTime = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point m_previousTime = std::chrono::steady_clock::now();
+
 	std::vector<float> m_vertices;
-	const float& m_phase;
+	float m_phase;
 	const unsigned int& m_VBO, m_VAO;
 };

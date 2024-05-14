@@ -138,7 +138,7 @@
     <ClInclude Include="Line.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="VertexArray.h" />
+    <ClInclude Include="MorphObject.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
