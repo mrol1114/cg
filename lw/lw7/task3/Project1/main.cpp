@@ -48,7 +48,7 @@ void main()
     }
 
     Window window(glfwWindow);
-    window.AddDrawable(std::make_shared<MorphObject>(8, window.GetVBO(), window.GetVAO()));
+    window.AddDrawable(std::make_shared<MorphObject>(80, window.GetVBO(), window.GetVAO()));
     window.AddShader(std::make_shared<Shader>(GL_VERTEX_SHADER, vertexShaderCircle.c_str()));
     window.Run();
 

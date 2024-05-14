@@ -74,15 +74,15 @@ private:
 	{
 		auto elapsed = m_previousTime - m_currentTime;
 
-		float delta = elapsed.count() * 0.001f;
+		float delta = elapsed.count() * m_ANIMATION_SPEED;
 
 		m_phase = fmodf(
-			float(m_phase + delta * 2 * M_PI / m_ANIMATION_SPEED),
+			float(m_phase + delta * 2 * M_PI / 0.001f),
 			float(2 * M_PI)
 		);
 	}
 
-	inline static const float m_ANIMATION_SPEED = 0.001;
+	inline static const float m_ANIMATION_SPEED = 0.005;
 
 	std::chrono::steady_clock::time_point m_currentTime = std::chrono::steady_clock::now();
 	std::chrono::steady_clock::time_point m_previousTime = std::chrono::steady_clock::now();
