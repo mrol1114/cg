@@ -9,12 +9,14 @@
 #include <windows.h>
 #include <stdio.h>
 
-#include "Clock.h"
+#include "CoordinateGrid.h"
+#include "Bezier—urve.h"
 
 class Window
 {
 public:
     Window(const std::string& windowTitle, int windowWidth, int windowHeight)
+        : m_coordinateGrid(CoordinateGrid(0.8, 0.2, 0.2))
     {
         if (!glfwInit())
             throw std::runtime_error("glfw is not initialized");
@@ -33,9 +35,8 @@ public:
     {
         glfwTerminate();
     }
-
-    // draw clock in different class
-    void MainLoop()
+    
+    void Run()
     {
         glfwMakeContextCurrent(m_window);
 
@@ -46,9 +47,10 @@ public:
         while (!glfwWindowShouldClose(m_window))
         {
             glClear(GL_COLOR_BUFFER_BIT);
-            glClearColor(0, 0, 0, 0);
+            glClearColor(1, 1, 1, 0);
 
-            m_clock.Draw();
+            m_coordinateGrid.Draw();
+            m_curve.Draw();
 
             glfwSwapBuffers(m_window);
             glfwPollEvents();
@@ -75,6 +77,7 @@ private:
         glMatrixMode(GL_MODELVIEW);
     }
 
+    BezierCurve m_curve;
+    CoordinateGrid m_coordinateGrid;
     GLFWwindow* m_window;
-    Clock m_clock;
 };
